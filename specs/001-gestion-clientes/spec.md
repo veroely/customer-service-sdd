@@ -171,7 +171,7 @@ Como consumidor de la API, quiero registrar un nuevo cliente para disponer de su
 
 ### User Story 2 - Consultar cliente por identificador e identificación (Priority: P1)
 
-Como consumidor de la API, quiero consultar un cliente de dos formas: por identificador interno y por número de identificación para obtener su información sin depender de un dato técnico interno.
+Como consumidor de la API, quiero consultar un cliente mediante dos rutas de acceso explícitas: por identificador interno y por número de identificación, para obtener su información sin depender de una sola clave técnica.
 
 **Why this priority**: La recuperación del cliente es el flujo base de valor del servicio y exige consultas deterministas por claves de negocio.
 
@@ -179,8 +179,8 @@ Como consumidor de la API, quiero consultar un cliente de dos formas: por identi
 
 **Acceptance Scenarios**:
 
-1. **Given** existe un cliente registrado, **When** el consumidor consulta por su identificador interno, **Then** el sistema devuelve la información del cliente.
-2. **Given** existe un cliente registrado con una identificación determinada, **When** el consumidor consulta por su identificación, **Then** el sistema devuelve la información del cliente.
+1. **Given** existe un cliente registrado, **When** el consumidor consulta por su identificador interno, **Then** el sistema devuelve la información del cliente mediante la ruta de identificador interno.
+2. **Given** existe un cliente registrado con una identificación determinada, **When** el consumidor consulta por su identificación, **Then** el sistema devuelve la información del cliente mediante la ruta de identificación.
 3. **Given** no existe un cliente con el identificador solicitado, **When** se realiza la consulta, **Then** el sistema informa que el cliente no existe.
 
 ---
@@ -232,8 +232,8 @@ Como consumidor de la API, quiero que el sistema valide los datos de entrada y r
 ## Functional Requirements
 
 1. El sistema DEBE permitir registrar un nuevo cliente con datos básicos válidos.
-2. El sistema DEBE permitir consultar un cliente mediante su identificador interno.
-3. El sistema DEBE permitir buscar un cliente mediante su número de identificación.
+2. El sistema DEBE permitir consultar un cliente mediante su identificador interno mediante una ruta de consulta explícita.
+3. El sistema DEBE permitir buscar un cliente mediante su número de identificación mediante una ruta de consulta explícita.
 4. El sistema DEBE permitir consultar una lista de clientes sustentada en paginación.
 5. El sistema DEBE permitir actualizar la información de un cliente existente sin alterar la fecha de creación ni el identificador interno.
 6. El sistema DEBE permitir desactivar un cliente por eliminación lógica, manteniendo el registro almacenado y cambiando su estado a DESACTIVADO.

@@ -28,10 +28,10 @@
 
 **Purpose**: Core infrastructure that MUST be complete before any user story can be implemented
 
-- [ ] T004 Define customer entity, request, and response record shape for the repository adapter model in `src/main/java/com/example/customer_service/model/`
-- [ ] T005 Implement the inbound customer HTTP adapter interface and controller integration points in `src/main/java/com/example/customer_service/infrastructure/adapter/input/`
-- [ ] T006 Implement the domain application service port definitions in `src/main/java/com/example/customer_service/application/port/`
-- [ ] T007 Create the repository adapter fulfilment boundary in `src/main/java/com/example/customer_service/infrastructure/adapter/output/`
+- [x] T004 Define customer entity, request, and response record shape for the repository adapter model in `src/main/java/com/example/customer_service/model/`
+- [x] T005 Implement the inbound customer HTTP adapter interface and controller integration points in `src/main/java/com/example/customer_service/infrastructure/adapter/input/`
+- [x] T006 Implement the domain application service port definitions in `src/main/java/com/example/customer_service/application/port/`
+- [x] T007 Create the repository adapter fulfilment boundary in `src/main/java/com/example/customer_service/infrastructure/adapter/output/`
 - [ ] T008 Configure audit logging around controller entry and exit for request and response traceability
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
@@ -51,8 +51,8 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [P] [US1] Add the create customer command and validation use case in `src/main/java/com/example/customer_service/application/service/`
-- [ ] T012 [US1] Implement create endpoint in the generated controller interface or controller adapter in `src/main/java/com/example/customer_service/infrastructure/adapter/input/`
+- [x] T011 [P] [US1] Add the create customer command and validation use case in `src/main/java/com/example/customer_service/application/service/`
+- [x] T012 [US1] Implement create endpoint in the generated controller interface or controller adapter in `src/main/java/com/example/customer_service/infrastructure/adapter/input/`
 - [ ] T013 [US1] Bind the client creation validation and uniqueness rules in the domain/application layer
 - [ ] T014 [US1] Register audit logging for request and response in the controller path
 

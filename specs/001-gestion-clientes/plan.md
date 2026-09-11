@@ -74,6 +74,17 @@ tests/java/com/example/customer_service/
 
 **Structure Decision**: Use the existing repository structure for Java Spring Boot source with domain, application, infrastructure, model, and resource contract folders under the root source tree. The generated OpenAPI server model remains a build-time dependency, while the feature contract artifacts remain in `specs/001-gestion-clientes/contracts/`. 
 
+## Implementation Status
+
+The current source tree now contains an inbound REST adapter controller that implements the generated API contract, a service class that maps the request payload into a domain model object, and an in-memory repository adapter fulfilling the output port contract.
+
+The technical implementation is aligned with the expected hexagonal structure:
+
+- `src/main/java/com/example/customer_service/application/service/ClienteService.java`
+- `src/main/java/com/example/customer_service/application/port/output/ClienteRepository.java`
+- `src/main/java/com/example/customer_service/infrastructure/adapter/output/InMemoryClienteRepository.java`
+- `src/main/java/com/example/customer_service/infrastructure/adapter/input/ClienteController.java`
+
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**

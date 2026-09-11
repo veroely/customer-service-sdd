@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.1.1'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.10.0'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testCompileOnly 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+// 1. SERVER GENERATION TASK
+def serverOutputDir = "$buildDir/generated/openapi/server"
+tasks.register('generateServerCode', org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	generatorName = "spring"
+	inputSpec = "$projectDir/src/main/resources/openapi/customer-spec.yaml"
+	outputDir = serverOutputDir
+	apiPackage = "com.example.customer_service"
+	modelPackage = "com.example.customer_service.model"
+
+	configOptions = [
+			interfaceOnly: "true",          // Generates only interfaces; you write the @RestController implementation
+			useSpringBoot3: "true",         // Ensures compatibility with Spring Boot 3+ / 4+ jakarta packages
+			useTags: "true",                // Uses OpenAPI tags to name your Controller classes
+			openApiNullable: "false"        // Disables unnecessary wrapper classes if not needed
+	]
+}
+
+// 3. INTEGRATE GENERATED CODE INTO SOURCE SETS
+sourceSets {
+	main {
+		java {
+			srcDirs += ["$serverOutputDir/src/main/java"]
+		}
+	}
+}
+
+// 4. AUTOMATE GENERATION BEFORE COMPILING
+compileJava.dependsOn tasks.generateServerCode
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

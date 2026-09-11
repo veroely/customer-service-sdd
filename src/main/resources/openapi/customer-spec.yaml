@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: API de Gestión de Clientes
+  version: 1.0.0
+  description: Contrato para administrar clientes de la organización.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/clientes:
+    post:
+      operationId: registrarCliente
+      summary: Registrar cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteEntrada'
+      responses:
+        '201':
+          description: Cliente registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '400':
+          $ref: '#/components/responses/ErrorSolicitud'
+        '409':
+          $ref: '#/components/responses/ErrorConflicto'
+    get:
+      operationId: listarClientes
+      summary: Listar clientes
+      parameters:
+        - $ref: '#/components/parameters/Pagina'
+        - $ref: '#/components/parameters/Tamano'
+      responses:
+        '200':
+          description: Página de clientes activos y desactivados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginaClientes'
+        '400':
+          $ref: '#/components/responses/ErrorSolicitud'
+  /api/clientes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: consultarClientePorId
+      summary: Consultar cliente por identificador interno
+      responses:
+        '200':
+          description: Cliente encontrado
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          $ref: '#/components/responses/ErrorNoEncontrado'
+    put:
+      operationId: actualizarCliente
+      summary: Actualizar cliente activo
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteEntrada'
+      responses:
+        '200':
+          description: Cliente actualizado
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '400':
+          $ref: '#/components/responses/ErrorSolicitud'
+        '404':
+          $ref: '#/components/responses/ErrorNoEncontrado'
+        '409':
+          $ref: '#/components/responses/ErrorConflicto'
+    delete:
+      operationId: desactivarCliente
+      summary: Desactivar cliente
+      responses:
+        '204':
+          description: Cliente desactivado
+        '404':
+          $ref: '#/components/responses/ErrorNoEncontrado'
+        '409':
+          $ref: '#/components/responses/ErrorConflicto'
+  /api/clientes/identificacion/{numeroIdentificacion}:
+    get:
+      operationId: consultarClientePorIdentificacion
+      summary: Consultar cliente por identificación
+      parameters:
+        - name: numeroIdentificacion
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '404':
+          $ref: '#/components/responses/ErrorNoEncontrado'
+components:
+  parameters:
+    Pagina:
+      name: pagina
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    Tamano:
+      name: tamano
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+      description: ETag de la versión leída por el consumidor.
+  headers:
+    ETag:
+      description: Versión actual del cliente.
+      schema:
+        type: string
+  schemas:
+    ClienteEntrada:
+      type: object
+      required: [tipoIdentificacion, numeroIdentificacion, nombres, apellidos, email, telefono]
+      properties:
+        tipoIdentificacion:
+          type: string
+        numeroIdentificacion:
+          type: string
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        email:
+          type: string
+          format: email
+        telefono:
+          type: string
+          pattern: '^09\\d{8}$'
+          description: Número telefónico de 10 dígitos que comienza con 09.
+    Cliente:
+      allOf:
+        - $ref: '#/components/schemas/ClienteEntrada'
+        - type: object
+          required: [id, estado, fechaCreacion, fechaActualizacion]
+          properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
+            estado:
+              type: string
+              enum: [ACTIVO, DESACTIVADO]
+              readOnly: true
+            fechaCreacion:
+              type: string
+              format: date-time
+              readOnly: true
+            fechaActualizacion:
+              type: string
+              format: date-time
+              readOnly: true
+    PaginaClientes:
+      type: object
+      required: [elementos, pagina, tamano, total, totalPaginas]
+      properties:
+        elementos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cliente'
+        pagina:
+          type: integer
+        tamano:
+          type: integer
+        total:
+          type: integer
+        totalPaginas:
+          type: integer
+    Error:
+      type: object
+      required: [codigo, mensaje]
+      properties:
+        codigo:
+          type: string
+        mensaje:
+          type: string
+        campo:
+          type: string
+  responses:
+    ErrorSolicitud:
+      description: Solicitud inválida
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ErrorNoEncontrado:
+      description: Cliente inexistente
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ErrorConflicto:
+      description: Duplicidad, versión obsoleta o cliente desactivado
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'

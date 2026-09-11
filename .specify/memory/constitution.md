@@ -1,50 +1,40 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report
+Version change: 1.0.0 → 1.1.0
+List of modified principles: I. Arquitectura Hexagonal, II. Lógica de negocio libre de infraestructura, III. Contrato OpenAPI primero, IV. Auditoría de controlador, V. Idioma y secreto libre
+Added sections: none
+Removed sections: none
+Follow-up TODOs: TODO(RATIFICATION_DATE): Original ratification date is not recorded in repo context
+-->
+
+# Customer Service Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Arquitectura Hexagonal
+El proyecto DEBE implementar una arquitectura hexagonal con puertos y adaptadores. La lógica de negocio DEBE estar separada de los detalles de infraestructura, marcos, persistencia, comunicación externa y transporte. Cada flujo de entrada o salida DEBE cruzar una frontera explícita de puerto y adaptador antes de llegar a la capa de dominio. Rationale: La separación del dominio permite cambiar tecnología sin alterar la intención de negocio.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Lógica de Negocio Independiente
+La lógica de negocio DEBE permanecer independiente de frameworks, infraestructura, persistencia y comunicación externa. Las reglas y comportamientos de negocio DEBEN expresarse en entidades, casos de uso y puertos del dominio, no en clases acopladas al entorno de ejecución. Rationale: La capacidad de prueba, evolución y reutilización del dominio depende de su aislamiento declarativo.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Contrato OpenAPI Primero
+La creación o modificación de cualquier endpoint DEBE comenzar con la definición o actualización del contrato OpenAPI. No DEBE implementarse ningún endpoint que no esté definido en el contrato OpenAPI. Cualquier cambio en un endpoint existente DEBE reflejarse primero en el contrato OpenAPI antes de modificar su implementación. Rationale: El contrato es la fuente autorizada del servicio y protege a consumidores y adaptadores.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Auditoría de Entrada y Salida
+El controlador DEBE registrar logs de auditoría para conocer la entrada recibida y la salida generada por cada operación. El contenido de dichos logs DEBE evitar secretos y DEBE conservar el contexto mínimo necesario para investigación y trazabilidad. Rationale: La observabilidad del flujo de solicitudes es un requisito de cumplimiento y soporte operativo.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Lenguaje y Secretos
+El idioma principal del proyecto DEBE ser español en artefactos de código, documentación y conversaciones de trabajo que definan el comportamiento del servicio. El código fuente NO DEBE contener claves, contraseñas, tokens, credenciales, certificados privados ni ningún otro secreto. Rationale: El idioma y la ausencia de secretos son condiciones de confianza, trazabilidad y seguridad para cualquier entrega.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Additional Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+Este repositorio DEBE tratar la capa de dominio, la capa de aplicación y la capa de infraestructura como responsabilidades distintas. La interfaz pública y su contrato fiel DEBEN quedar en el archivo OpenAPI de origen y cualquier generación de código o modelo derivado DEBE considerarse artefacto derivado del contrato, nunca el origen del acuerdo. Los cambios de schema, rutas y respuestas DEBEN mantenerse sincronizados entre OpenAPI e implementación.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+La construcción de nuevos endpoints o cambios de comportamiento DEBE seguir este flujo: definir o actualizar el contrato OpenAPI, documentar el cambio de forma verificable, crear o ajustar la prueba que compruebe el comportamiento, y luego implementar la respuesta mínima necesaria. La revisión de código DEBE comprobar que el endpoint exista en el contrato, que el flujo del controlador registre auditoría, y que el código fuente no contenga secretos ni dependencias de infraestructura en la capa de negocio.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Esta Constitución prevalece sobre prácticas informales cuando exista conflicto. Las enmiendas DEBEN registrarse con documentación, revisión y un plan de migración cuando cambien comportamientos existentes. La revisión de cumplimiento DEBE verificar que cada principio sea medible, que los endpoints sigan el contrato OpenAPI, que la capa de negocio permanezca aislada de infraestructura y que la auditoría y la ausencia de secretos se preserven en la entrega.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): Original ratification date is not recorded in repo context | **Last Amended**: 2026-09-11

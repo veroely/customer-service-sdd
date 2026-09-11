@@ -8,7 +8,7 @@
 
 ## Summary
 
-La funcionalidad de gestión de clientes se concentra en el registro, consulta por identificador interno y por identificación, listado paginado, actualización y desactivación lógica. La solución se apoya en la capa de dominio y en una interfaz OpenAPI que sirve de contrato publicable para el servicio.
+La funcionalidad de gestión de clientes se concentra en el registro, consulta por identificador interno y por número de identificación, listado paginado, actualización y desactivación lógica. La solución se apoya en la capa de dominio y en una interfaz OpenAPI que sirve de contrato publicable para el servicio, con dos rutas de consulta explícitas: `/api/clientes/{id}` para el identificador interno y `/api/clientes/identificacion/{identificacion}` para la identificación de negocio.
 
 ## Technical Context
 

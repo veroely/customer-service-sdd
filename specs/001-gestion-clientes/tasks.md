@@ -68,7 +68,7 @@
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T015 [P] [US2] Contract test for `GET /api/clientes/{id}` and `GET /api/clientes/identificacion/{identificacion}` in `src/test/java/com/example/customer_service/`
+- [ ] T015 [P] [US2] Contract test for the explicit dual lookup routes `GET /api/clientes/{id}` and `GET /api/clientes/identificacion/{identificacion}` based on the contract in `specs/001-gestion-clientes/contracts/clientes-api.yaml`.
 - [ ] T016 [P] [US2] Integration test for fetch by internal ID and fetch by business identification in `src/test/java/com/example/customer_service/`
 
 ### Implementation for User Story 2

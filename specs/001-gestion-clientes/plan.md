@@ -1,53 +1,53 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Gestión de Clientes
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: `001-gestion-clientes` | **Date**: 2026-09-11 | **Spec**: [spec.md](../spec.md)
 
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+**Input**: Feature specification from `/specs/001-gestion-clientes/spec.md`
 
 **Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+La funcionalidad de gestión de clientes se concentra en el registro, consulta por identificador interno y por identificación, listado paginado, actualización y desactivación lógica. La solución se apoya en la capa de dominio y en una interfaz OpenAPI que sirve de contrato publicable para el servicio.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Language/Version**: Java 21
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Primary Dependencies**: Spring Boot 4, Spring WebMVC, Springdoc OpenAPI, OpenAPI Generator, Gradle
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Storage**: N/A in the template context; implementation will align with repository service patterns and persistence adapters already implied by the project structure.
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Testing**: Gradle tests via Spring Boot test starter and JUnit platform.
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Target Platform**: Java backend service, Spring Boot web service.
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: web-service
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Performance Goals**: Support standard request/response service operation with paginated client listings and deterministic query behavior.
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Constraints**: OpenAPI contract must be source of truth; business logic must remain independent of frameworks and external dependencies; source must not contain secrets.
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
-
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: Single customer-management resource with CRUD-style creation, reading, listing, update, and logical disable flows.
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+PASS: The architecture must remain hexagonal with ports and adapters, and the domain, application, and infrastructure responsibilities remain separated.
+
+PASS: The OpenAPI contract is the source of truth for endpoint definition and modification.
+
+PASS: Audit logging for controller request and response context is required.
+
+PASS: Spanish is the primary language and no source should contain secrets.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
+specs/001-gestion-clientes/
 ├── plan.md              # This file (/speckit-plan command output)
 ├── research.md          # Phase 0 output (/speckit-plan command)
 ├── data-model.md        # Phase 1 output (/speckit-plan command)
@@ -57,57 +57,25 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+src/main/java/com/example/customer_service/
+├── domain/
+├── application/
+├── infrastructure/
+└── model/
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+src/main/resources/openapi/
+└── customer-spec.yaml
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+tests/java/com/example/customer_service/
+└── integration and unit test support
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Use the existing repository structure for Java Spring Boot source with domain, application, infrastructure, model, and resource contract folders under the root source tree. The generated OpenAPI server model remains a build-time dependency, while the feature contract artifacts remain in `specs/001-gestion-clientes/contracts/`. 
 
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+No violations. The feature stream aligns with the repository constitution and the active OpenAPI-first code generation setup.

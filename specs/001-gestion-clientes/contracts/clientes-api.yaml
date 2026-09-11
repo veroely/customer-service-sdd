@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: Contrato de Gestión de Clientes
+  version: 1.0.0
+  description: Contrato de soporte para registrar, consultar, listar, actualizar y desactivar clientes.
+paths:
+  /api/clientes:
+    post:
+      summary: Registrar cliente
+      operationId: registrarCliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteEntrada'
+      responses:
+        '201':
+          description: Cliente registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+        '400':
+          description: Solicitud inválida
+        '409':
+          description: Conflicto de unicidad
+    get:
+      summary: Listar clientes
+      operationId: listarClientes
+      parameters:
+        - $ref: '#/components/parameters/Pagina'
+        - $ref: '#/components/parameters/Tamano'
+      responses:
+        '200':
+          description: Lista paginada de clientes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginaClientes'
+  /api/clientes/{id}:
+    get:
+      summary: Consultar cliente por identificador interno
+      operationId: consultarClientePorId
+      parameters:
+        - $ref: '#/components/parameters/IdInternoPath'
+      responses:
+        '200':
+          description: Cliente encontrado
+        '404':
+          description: Cliente no encontrado
+    put:
+      summary: Actualizar cliente
+      operationId: actualizarCliente
+      parameters:
+        - $ref: '#/components/parameters/IdInternoPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteEntrada'
+      responses:
+        '200':
+          description: Cliente actualizado
+        '404':
+          description: Cliente no encontrado
+  /api/clientes/identificacion/{identificacion}:
+    get:
+      summary: Consultar cliente por número de identificación
+      operationId: consultarClientePorIdentificacion
+      parameters:
+        - $ref: '#/components/parameters/IdentificacionPath'
+      responses:
+        '200':
+          description: Cliente encontrado
+        '404':
+          description: Cliente no encontrado
+components:
+  parameters:
+    IdInternoPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    IdentificacionPath:
+      name: identificacion
+      in: path
+      required: true
+      schema:
+        type: string
+    Pagina:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+    Tamano:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 20
+  schemas:
+    ClienteEntrada:
+      type: object
+      required:
+        - identificacion
+        - email
+        - telefono
+      properties:
+        identificacion:
+          type: string
+        email:
+          type: string
+          format: email
+        telefono:
+          type: string
+        estado:
+          type: string
+          enum: [ACTIVO, DESACTIVADO]
+    Cliente:
+      type: object
+      properties:
+        idInterno:
+          type: string
+          format: uuid
+        identificacion:
+          type: string
+        email:
+          type: string
+          format: email
+        telefono:
+          type: string
+        estado:
+          type: string
+          enum: [ACTIVO, DESACTIVADO]
+        fechaCreacion:
+          type: string
+          format: date-time
+        fechaActualizacion:
+          type: string
+          format: date-time
+    PaginaClientes:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cliente'
+        page:
+          type: integer
+        size:
+          type: integer

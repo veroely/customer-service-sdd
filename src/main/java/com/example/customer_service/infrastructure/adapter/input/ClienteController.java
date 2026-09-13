@@ -5,8 +5,10 @@ import com.example.customer_service.application.service.ClienteService;
 import com.example.customer_service.model.Cliente;
 import com.example.customer_service.model.ClienteEntrada;
 import com.example.customer_service.model.PaginaClientes;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -21,7 +23,7 @@ public class ClienteController implements DefaultApi {
     }
 
     @Override
-    public ResponseEntity<Cliente> registrarCliente(ClienteEntrada clienteEntrada) {
+    public ResponseEntity<Cliente> registrarCliente(@Valid @RequestBody ClienteEntrada clienteEntrada) {
         Cliente cliente = clienteService.registrarCliente(clienteEntrada);
         return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
@@ -32,7 +34,7 @@ public class ClienteController implements DefaultApi {
     }
 
     @Override
-    public ResponseEntity<PaginaClientes> consultarClientes(Integer pagina, Integer tamano) {
+    public ResponseEntity<PaginaClientes> listarClientes(Integer pagina, Integer tamano) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
@@ -42,7 +44,7 @@ public class ClienteController implements DefaultApi {
     }
 
     @Override
-    public ResponseEntity<Void> desactivarCliente(UUID id, String ifMatch) {
+    public ResponseEntity<Void> desactivarCliente(UUID id) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 

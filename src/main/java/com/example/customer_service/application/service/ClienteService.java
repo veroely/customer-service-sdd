@@ -3,10 +3,12 @@ package com.example.customer_service.application.service;
 import com.example.customer_service.application.port.output.ClienteRepository;
 import com.example.customer_service.model.Cliente;
 import com.example.customer_service.model.ClienteEntrada;
+import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Service
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;

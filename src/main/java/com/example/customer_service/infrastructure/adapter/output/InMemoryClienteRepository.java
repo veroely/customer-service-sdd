@@ -2,12 +2,14 @@ package com.example.customer_service.infrastructure.adapter.output;
 
 import com.example.customer_service.application.port.output.ClienteRepository;
 import com.example.customer_service.model.Cliente;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Repository
 public class InMemoryClienteRepository implements ClienteRepository {
 
     private final Map<UUID, Cliente> clientesPorId = new ConcurrentHashMap<>();
